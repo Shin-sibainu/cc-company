@@ -13,34 +13,29 @@
 ## オーナープロフィール
 
 - **事業・活動**: {{BUSINESS_TYPE}}
-- **ミッション**: {{MISSION}}
-- **言語**: {{LANGUAGE}}
+- **目標・課題**: {{GOALS_AND_CHALLENGES}}
 - **作成日**: {{CREATED_DATE}}
 
 ## 組織構成
 
 ```
 .company/
-{{DIRECTORY_TREE}}
+├── CLAUDE.md
+└── secretary/
+    ├── CLAUDE.md
+    ├── inbox/
+    ├── todos/
+    └── notes/
 ```
 
-## 組織図
+{{ADDITIONAL_DEPARTMENTS}}
 
-```
-━━━━━━━━━━━━━━━━━━━━
-  オーナー（あなた）
-━━━━━━━━━━━━━━━━━━━━
-         │
-    ┌────┴────┐
-    │  CEO    │
-    └────┬────┘
-         │
-{{ORG_CHART}}
-```
+## 部署一覧
 
-## 各部署の役割
-
-{{DEPARTMENT_DESCRIPTIONS}}
+| 部署 | フォルダ | 役割 |
+|------|---------|------|
+| 秘書室 | secretary | 窓口・相談役。TODO管理、壁打ち、メモ。常設。 |
+{{DEPARTMENT_TABLE_ROWS}}
 
 ## 運営ルール
 
@@ -48,35 +43,34 @@
 - ユーザーとの対話は常に秘書が担当する
 - 秘書は丁寧だが親しみやすい口調で話す
 - 壁打ち、相談、雑談、何でも受け付ける
+- 部署の作業が必要な場合、秘書が直接該当部署のフォルダに書き込む
 
-### CEOの振り分け
-- 部署の作業が必要と秘書が判断したら、CEOロジックが振り分けを行う
-- 振り分け結果はユーザーに報告してから実行する
-- 意思決定は `ceo/decisions/` にログを残す
+### 自動記録
+- 意思決定、学び、アイデアは言われなくても記録する
+- 意思決定 → `secretary/notes/YYYY-MM-DD-decisions.md`
+- 学び → `secretary/notes/YYYY-MM-DD-learnings.md`
+- アイデア → `secretary/inbox/YYYY-MM-DD.md`
+
+### 同日1ファイル
+- 同じ日付のファイルがすでに存在する場合は追記する。新規作成しない
+
+### 日付チェック
+- ファイル操作の前に必ず今日の日付を確認する
 
 ### ファイル命名規則
 - **日次ファイル**: `YYYY-MM-DD.md`
 - **トピックファイル**: `kebab-case-title.md`
-- **テンプレート**: `_template.md`（各フォルダに1つ、変更しない）
-- **レビュー**: 週次 `YYYY-WXX.md`、月次 `YYYY-MM.md`
 
 ### TODO形式
 ```markdown
 - [ ] タスク内容 | 優先度: 高/通常/低 | 期限: YYYY-MM-DD
-- [x] 完了タスク | 優先度: 通常 | 完了: YYYY-MM-DD
+- [x] 完了タスク | 完了: YYYY-MM-DD
 ```
 
 ### コンテンツルール
 1. 迷ったら `secretary/inbox/` に入れる
-2. 新規ファイルは `_template.md` をコピーして使う
-3. 既存ファイルは上書きしない（追記のみ）
-4. 追記時はタイムスタンプを付ける
-5. 1トピック1ファイルを守る
-
-### レビューサイクル
-- **デイリー**: 秘書が朝晩のTODO確認をサポート
-- **ウィークリー**: `reviews/` に週次レビューを生成
-- **マンスリー**（任意）: 完了項目のレビューとアーカイブ
+2. 既存ファイルは上書きしない（追記のみ）
+3. 追記時はタイムスタンプを付ける
 
 ## パーソナライズメモ
 
@@ -89,26 +83,21 @@
 
 | 変数 | ソース | 説明 |
 |------|--------|------|
-| `{{BUSINESS_TYPE}}` | Step 2a | 事業・活動の種類 |
-| `{{MISSION}}` | Step 2b | ミッション・目標 |
-| `{{LANGUAGE}}` | Step 4 | ja / en / bilingual |
+| `{{BUSINESS_TYPE}}` | Q1 | 事業・活動の種類 |
+| `{{GOALS_AND_CHALLENGES}}` | Q2 | 目標・困りごと |
 | `{{CREATED_DATE}}` | 自動 | 組織構築日 |
-| `{{DIRECTORY_TREE}}` | Step 3 | 確認済みフォルダツリー |
-| `{{ORG_CHART}}` | Step 3 | 組織図の部署部分 |
-| `{{DEPARTMENT_DESCRIPTIONS}}` | Step 3 | 各部署の役割説明 |
-| `{{PERSONALIZATION_NOTES}}` | Step 2c | 困りごと・追加コンテキスト |
+| `{{ADDITIONAL_DEPARTMENTS}}` | 部署追加時 | 追加部署のディレクトリツリー（初期は空） |
+| `{{DEPARTMENT_TABLE_ROWS}}` | 部署追加時 | 追加部署のテーブル行（初期は空） |
+| `{{PERSONALIZATION_NOTES}}` | Q1+Q2 | ユーザーの状況に応じたメモ |
 
 ---
 
 ## 部署説明スニペット
 
-`{{DEPARTMENT_DESCRIPTIONS}}` を生成する際に使用:
+部署追加時に `{{DEPARTMENT_TABLE_ROWS}}` に追記するデータ:
 
 | 部署 | フォルダ | 説明 |
 |------|---------|------|
-| 秘書室 | secretary | 窓口・相談役。TODO管理、壁打ち、クイックメモ。常設。 |
-| CEO | ceo | 意思決定・部署振り分け。常設。 |
-| レビュー | reviews | 週次・月次レビュー。常設。 |
 | PM | pm | プロジェクト進捗、マイルストーン、チケット管理。 |
 | リサーチ | research | 市場調査、競合分析、技術調査。 |
 | マーケティング | marketing | コンテンツ企画、SNS戦略、キャンペーン管理。 |

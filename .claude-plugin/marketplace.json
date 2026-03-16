@@ -4,14 +4,14 @@
     "name": "Shin-sibainu"
   },
   "metadata": {
-    "description": "Claude Codeで仮想会社組織を構築するプラグイン"
+    "description": "秘書から始める仮想組織プラグイン。3ステップで即運用開始。"
   },
   "plugins": [
     {
       "name": "company",
       "source": "./plugins/company",
-      "description": "対話的オンボーディングで仮想会社組織を構築。秘書が窓口となり、CEOが各部署へ指示を振り分ける。",
-      "version": "1.0.0",
+      "description": "秘書から始める仮想組織スキル。3ステップで即運用開始、部署は必要に応じて自然に増える。",
+      "version": "2.0.0",
       "author": {
         "name": "Shin-sibainu"
       },

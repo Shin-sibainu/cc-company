@@ -4,6 +4,8 @@
   "description": "Claude Code で仮想組織を構築・運営するプラグイン。",
   "main": "index.js",
   "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
@@ -20,6 +22,7 @@
   },
   "homepage": "https://github.com/Shin-sibainu/cc-company#readme",
   "devDependencies": {
-    "vitepress": "^1.6.4"
+    "vitepress": "^1.6.4",
+    "vitest": "^4.1.1"
   }
 }

@@ -2,10 +2,61 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
-import { scan, scanDepartment } from "./scanner.js";
+import { scan, scanDepartment, scanTree } from "./scanner.js";
 import { createWatcher } from "./watcher.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+function searchFiles(baseDir, dir, query, results) {
+  let entries;
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch { return; }
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory() && !entry.name.startsWith(".")) {
+      searchFiles(baseDir, fullPath, query, results);
+    } else if (entry.name.endsWith(".md") && entry.name !== "CLAUDE.md" && !entry.name.startsWith("_")) {
+      try {
+        const content = fs.readFileSync(fullPath, "utf-8");
+        const lower = content.toLowerCase();
+        const nameMatch = entry.name.toLowerCase().includes(query);
+        const contentMatch = lower.includes(query);
+
+        if (nameMatch || contentMatch) {
+          const relativePath = path.relative(baseDir, fullPath).replace(/\\/g, "/");
+          const dept = relativePath.split("/")[0];
+
+          // Extract matching lines
+          const matches = [];
+          const lines = content.split("\n");
+          for (let i = 0; i < lines.length; i++) {
+            if (lines[i].toLowerCase().includes(query)) {
+              matches.push({ line: i + 1, text: lines[i].trim().substring(0, 120) });
+              if (matches.length >= 3) break;
+            }
+          }
+
+          // Title from first heading
+          let title = entry.name.replace(".md", "");
+          for (const line of lines) {
+            const m = line.match(/^#\s+(.+)/);
+            if (m) { title = m[1].trim(); break; }
+          }
+
+          results.push({
+            path: relativePath,
+            department: dept,
+            title,
+            matches,
+            score: (nameMatch ? 10 : 0) + matches.length,
+          });
+        }
+      } catch { /* empty */ }
+    }
+  }
+}
 const distDir = path.join(__dirname, "..", "dist");
 
 export function startServer(companyDir, port) {
@@ -71,6 +122,20 @@ export function startServer(companyDir, port) {
     const data = scanDepartment(companyDir, req.params.id);
     if (!data) return res.status(404).json({ error: "Department not found" });
     res.json(data);
+  });
+
+  app.get("/api/search", (req, res) => {
+    const q = (req.query.q || "").toLowerCase().trim();
+    if (!q) return res.json([]);
+
+    const results = [];
+    searchFiles(companyDir, companyDir, q, results);
+    results.sort((a, b) => b.score - a.score);
+    res.json(results.slice(0, 30));
+  });
+
+  app.get("/api/tree", (_req, res) => {
+    res.json(scanTree(companyDir));
   });
 
   app.get("/api/activity", (_req, res) => {

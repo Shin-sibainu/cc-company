@@ -244,6 +244,56 @@ function getSubfolders(dir) {
   }
 }
 
+export function scanTree(companyDir) {
+  return buildTreeNode(companyDir, companyDir);
+}
+
+function buildTreeNode(baseDir, dir) {
+  const nodes = [];
+  let entries;
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return nodes;
+  }
+
+  // Folders first, then files
+  const folders = entries.filter((e) => e.isDirectory() && !e.name.startsWith("."));
+  const files = entries.filter(
+    (e) => !e.isDirectory() && e.name.endsWith(".md") && e.name !== "CLAUDE.md" && !e.name.startsWith("_")
+  );
+
+  for (const folder of folders) {
+    const fullPath = path.join(dir, folder.name);
+    const children = buildTreeNode(baseDir, fullPath);
+    const fileCount = countFiles(fullPath);
+    nodes.push({
+      name: folder.name,
+      displayName: KNOWN_DEPARTMENTS[folder.name] || folder.name,
+      type: "folder",
+      fileCount,
+      children,
+    });
+  }
+
+  for (const file of files) {
+    const fullPath = path.join(dir, file.name);
+    let status = null;
+    try {
+      const content = fs.readFileSync(fullPath, "utf-8");
+      status = getStatusFromFrontmatter(content);
+    } catch { /* empty */ }
+
+    nodes.push({
+      name: file.name,
+      type: "file",
+      status,
+    });
+  }
+
+  return nodes;
+}
+
 export function scanDepartment(companyDir, deptId) {
   const deptDir = path.join(companyDir, deptId);
   if (!fs.existsSync(deptDir)) return null;

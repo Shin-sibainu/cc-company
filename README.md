@@ -2,6 +2,8 @@
 
 Claude Code で仮想組織を構築・運営するプラグイン。
 
+**[ドキュメント](https://shin-sibainu.github.io/cc-company/)** | **[English](https://shin-sibainu.github.io/cc-company/en/)**
+
 `/company` を実行すると、秘書があなた専用の窓口になります。3ステップで即運用開始。部署は使い方に合わせて自然に増えていきます。
 
 ## インストール

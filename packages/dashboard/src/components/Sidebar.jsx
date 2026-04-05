@@ -20,6 +20,24 @@ export default function Sidebar({ data, view, onNavigate, open, onClose }) {
         >
           &#9632; Dashboard
         </div>
+        <div
+          className={`sidebar-item ${view.type === "explorer" ? "active" : ""}`}
+          onClick={() => onNavigate("explorer")}
+        >
+          &#9776; Explorer
+        </div>
+        <div
+          className={`sidebar-item ${view.type === "graph" ? "active" : ""}`}
+          onClick={() => onNavigate("graph")}
+        >
+          &#10023; Graph
+        </div>
+        <div
+          className={`sidebar-item ${view.type === "search" ? "active" : ""}`}
+          onClick={() => onNavigate("search")}
+        >
+          &#8981; Search
+        </div>
       </div>
 
       {org.business && (
@@ -44,6 +62,16 @@ export default function Sidebar({ data, view, onNavigate, open, onClose }) {
             <span className="sidebar-count">{dept.fileCount}</span>
           </div>
         ))}
+      </div>
+
+      <div className="sidebar-section sidebar-links">
+        <div className="sidebar-section-title">Links</div>
+        <a href="https://shin-sibainu.github.io/cc-company/" target="_blank" rel="noopener" className="sidebar-item sidebar-link">
+          &#9758; Docs
+        </a>
+        <a href="https://github.com/Shin-sibainu/cc-company" target="_blank" rel="noopener" className="sidebar-item sidebar-link">
+          &#9758; GitHub
+        </a>
       </div>
     </aside>
   );

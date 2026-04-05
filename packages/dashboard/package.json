@@ -1,0 +1,43 @@
+{
+  "name": "cc-company-dashboard",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Dashboard for cc-company virtual organization",
+  "bin": {
+    "cc-company-dashboard": "./bin/cli.js"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "node bin/cli.js",
+    "preview": "vite build && node bin/cli.js"
+  },
+  "files": [
+    "bin/",
+    "server/",
+    "dist/"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "cc-company",
+    "dashboard",
+    "claude-code",
+    "organization"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "chokidar": "^4.0.0",
+    "express": "^4.21.0",
+    "gray-matter": "^4.0.3",
+    "open": "^10.0.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-markdown": "^10.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.1",
+    "vite": "^8.0.3"
+  }
+}

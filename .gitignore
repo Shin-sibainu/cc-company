@@ -1,4 +1,6 @@
 .claude/
+.company/
 node_modules/
 docs/.vitepress/cache/
 docs/.vitepress/dist/
+packages/dashboard/dist/

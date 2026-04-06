@@ -1,6 +1,6 @@
 {
   "name": "cc-company-dashboard",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "Dashboard for cc-company virtual organization",
   "bin": {

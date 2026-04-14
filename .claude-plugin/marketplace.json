@@ -11,7 +11,7 @@
       "name": "company",
       "source": "./plugins/company",
       "description": "秘書から始める仮想組織スキル。3ステップで即運用開始、部署は必要に応じて自然に増える。",
-      "version": "2.0.0",
+      "version": "2.1.0",
       "author": {
         "name": "Shin-sibainu"
       },

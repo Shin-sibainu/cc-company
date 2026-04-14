@@ -4,6 +4,7 @@ export default defineConfig({
   title: "cc-company",
   base: "/cc-company/",
   cleanUrls: true,
+  ignoreDeadLinks: [/^http:\/\/localhost/],
 
   head: [["link", { rel: "icon", href: "/favicon.ico" }]],
 

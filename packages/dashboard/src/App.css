@@ -1088,6 +1088,214 @@
 }
 
 /* ═══════════════════════════════════════════
+   SEARCH SHORTCUT BUTTON (topbar)
+   ═══════════════════════════════════════════ */
+
+.search-shortcut {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 180ms var(--ease);
+}
+
+.search-shortcut:hover {
+  border-color: var(--border-hover);
+  color: var(--text-secondary);
+  background: var(--bg-hover);
+}
+
+.search-shortcut kbd {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border-default);
+  background: var(--bg-base);
+  color: var(--text-muted);
+}
+
+.theme-toggle { margin-left: 0; }
+
+/* ═══════════════════════════════════════════
+   WEEKLY HEATMAP
+   ═══════════════════════════════════════════ */
+
+.heatmap-section {
+  margin-bottom: 28px;
+}
+
+.heatmap-meta {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 16px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.heatmap-meta b {
+  color: var(--text-primary);
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 500;
+  margin-right: 4px;
+}
+
+.heatmap-grid {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.heat-cell {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  display: inline-block;
+  background: var(--bg-hover);
+  transition: transform 120ms var(--ease), background 120ms var(--ease);
+  cursor: default;
+}
+
+.heat-cell[data-level="0"] { background: var(--bg-hover); }
+.heat-cell[data-level="1"] { background: color-mix(in srgb, var(--accent) 25%, var(--bg-hover)); }
+.heat-cell[data-level="2"] { background: color-mix(in srgb, var(--accent) 50%, var(--bg-hover)); }
+.heat-cell[data-level="3"] { background: color-mix(in srgb, var(--accent) 75%, var(--bg-hover)); }
+.heat-cell[data-level="4"] { background: var(--accent); }
+
+.heat-cell:hover {
+  transform: scale(1.15);
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+}
+
+.heatmap-legend .heat-cell {
+  width: 12px;
+  height: 12px;
+}
+
+/* ═══════════════════════════════════════════
+   TODO TREND CHART
+   ═══════════════════════════════════════════ */
+
+.trend-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  height: 140px;
+  padding-top: 10px;
+}
+
+.trend-bar-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  cursor: default;
+}
+
+.trend-bar {
+  flex: 1;
+  width: 100%;
+  max-width: 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: var(--bg-hover);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  transition: filter 180ms var(--ease);
+}
+
+.trend-bar-wrap:hover .trend-bar {
+  filter: brightness(1.1);
+}
+
+.trend-bar-incomplete {
+  width: 100%;
+  background: var(--yellow);
+  opacity: 0.55;
+  transition: height 400ms var(--ease);
+}
+
+.trend-bar-complete {
+  width: 100%;
+  background: var(--green);
+  transition: height 400ms var(--ease);
+}
+
+.trend-bar-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════
+   INBOX PREVIEW
+   ═══════════════════════════════════════════ */
+
+.inbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.inbox-item {
+  display: grid;
+  grid-template-columns: 44px 44px 1fr;
+  align-items: baseline;
+  gap: 12px;
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 14px;
+}
+
+.inbox-item:last-child { border-bottom: none; }
+
+.inbox-date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.inbox-time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  text-align: center;
+}
+
+.inbox-content {
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.45;
+}
+
+/* ═══════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════ */
 
@@ -1115,6 +1323,19 @@
   .dept-split { grid-template-columns: 1fr; }
   .dept-detail-view { height: auto; }
   .dept-split-list { max-height: 220px; }
+}
+
+@media (max-width: 768px) {
+  .search-shortcut span { display: none; }
+  .search-shortcut {
+    padding: 7px 10px;
+  }
+  .heat-cell {
+    width: 14px;
+    height: 14px;
+  }
+  .trend-chart { height: 110px; gap: 6px; }
+  .inbox-item { grid-template-columns: 44px 40px 1fr; gap: 8px; }
 }
 
 @media (max-width: 480px) {

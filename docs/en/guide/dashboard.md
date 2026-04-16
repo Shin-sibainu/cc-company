@@ -29,9 +29,17 @@ See your organization overview at a glance.
 - **TODO**: Today's incomplete / completed count
 - **Inbox**: Number of unprocessed notes
 - **Departments**: Active department count
+- **Activity Heatmap**: 14-day GitHub-style heatmap of file edits
+- **TODO Trend**: 7-day stacked chart of completed vs open TODOs
 - **Today's TODO**: Task list by priority
+- **Inbox Preview**: Latest inbox captures with body text
 - **Recent Activity**: Recent file changes
 - **Department Cards**: Status summary per department
+
+### Keyboard Shortcuts
+
+- `⌘ + K` / `Ctrl + K`: Open search
+- `Esc`: Close mobile sidebar
 
 ### Explorer
 

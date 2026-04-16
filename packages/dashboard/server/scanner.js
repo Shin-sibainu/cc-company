@@ -29,8 +29,94 @@ export function scan(companyDir) {
     inbox: getInbox(companyDir),
     departmentStats: getDepartmentStats(companyDir),
     recentActivity: getRecentActivity(companyDir),
+    insights: getInsights(companyDir),
   };
   return result;
+}
+
+function getInsights(companyDir) {
+  return {
+    heatmap: getActivityHeatmap(companyDir, 14),
+    todoTrend: getTodoTrend(companyDir, 7),
+    inboxPreview: getInboxPreview(companyDir, 5),
+  };
+}
+
+function getActivityHeatmap(companyDir, days) {
+  const buckets = {};
+  const today = new Date();
+  for (let i = 0; i < days; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    buckets[formatDate(d)] = 0;
+  }
+
+  const files = [];
+  collectFiles(companyDir, companyDir, files);
+  for (const f of files) {
+    const day = formatDate(new Date(f.modified));
+    if (day in buckets) buckets[day] += 1;
+  }
+
+  return Object.entries(buckets)
+    .map(([date, count]) => ({ date, count }))
+    .sort((a, b) => (a.date < b.date ? -1 : 1));
+}
+
+function getTodoTrend(companyDir, days) {
+  const todosDir = path.join(companyDir, "secretary", "todos");
+  const trend = [];
+  const today = new Date();
+
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const date = formatDate(d);
+    const file = path.join(todosDir, `${date}.md`);
+
+    let complete = 0;
+    let incomplete = 0;
+    if (fs.existsSync(file)) {
+      try {
+        const content = fs.readFileSync(file, "utf-8");
+        const parsed = parseTodoFile(content);
+        complete = parsed.stats?.complete || 0;
+        incomplete = parsed.stats?.incomplete || 0;
+      } catch { /* empty */ }
+    }
+
+    trend.push({ date, complete, incomplete, total: complete + incomplete });
+  }
+
+  return trend;
+}
+
+function getInboxPreview(companyDir, limit) {
+  const inboxDir = path.join(companyDir, "secretary", "inbox");
+  if (!fs.existsSync(inboxDir)) return [];
+
+  let files = [];
+  try {
+    files = fs.readdirSync(inboxDir)
+      .filter((f) => f.endsWith(".md"))
+      .sort()
+      .reverse()
+      .slice(0, 3);
+  } catch { return []; }
+
+  const entries = [];
+  for (const file of files) {
+    try {
+      const date = file.replace(".md", "");
+      const content = fs.readFileSync(path.join(inboxDir, file), "utf-8");
+      const parsed = parseInboxFile(content);
+      for (const entry of parsed.entries) {
+        entries.push({ date, ...entry });
+        if (entries.length >= limit) return entries;
+      }
+    } catch { /* empty */ }
+  }
+  return entries;
 }
 
 function getOrganizationInfo(companyDir) {

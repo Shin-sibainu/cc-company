@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { fetchDepartment } from "../services/api";
 
 export default function DepartmentDetail({ deptId, onBack }) {
@@ -99,7 +100,7 @@ export default function DepartmentDetail({ deptId, onBack }) {
                 <pre className="preview-content">{fileContent}</pre>
               ) : (
                 <div className="preview-rendered">
-                  <Markdown>{stripFrontmatter(fileContent)}</Markdown>
+                  <Markdown remarkPlugins={[remarkGfm]}>{stripFrontmatter(fileContent)}</Markdown>
                 </div>
               )}
             </>
